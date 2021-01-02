@@ -6,6 +6,8 @@
     <form
       action="/campgrounds/<%= campground._id  %>?_method=PUT"
       method="POST"
+      novalidate
+      class="validated-form"
     >
       <div class="mb-3">
         <label class="form-label" for="title">Title</label>
@@ -17,6 +19,7 @@
           required
           value="<%= campground.title %>"
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
@@ -28,6 +31,7 @@
           required
           value="<%= campground.location%>"
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="image">Image Url</label>
@@ -39,6 +43,7 @@
           required
           value="<%= campground.image%>"
         />
+        <div class="valid-feedback">Looks good!</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="price">Campground Price </label>
@@ -54,7 +59,9 @@
             aria-label="price"
             aria-describedby="price-label"
             value="<%= campground.price %>"
+            required
           />
+          <div class="valid-feedback">Looks good!</div>
         </div>
       </div>
 
@@ -65,14 +72,15 @@
           type="text"
           id="description"
           name="campground[description]"
+          required
           <!--
           prettier-ignore
           --
         >
+       
         <%= campground.description %> 
- 
-        ></textarea
-        >
+        </textarea>
+        <div class="valid-feedback">Looks good!</div>
       </div>
 
       <div class="mb-3">
