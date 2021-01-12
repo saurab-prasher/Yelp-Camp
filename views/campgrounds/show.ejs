@@ -3,6 +3,7 @@
 
 <div class="card mb-3">
   <div class="row">
+    <div id='map' style='width: 400px; height: 300px;'></div>
     <div class="col-6">
       <div
         id="campgroundCarousel"
@@ -180,3 +181,11 @@
     </div>
   </div>
 </div>
+
+<!-- prettier-ignore -->
+<script>
+  const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
+  const campground =<%- JSON.stringify(campground)%>;
+</script>
+
+<script src="/js/showPageMap.js"></script>

@@ -18,6 +18,18 @@ const CampgroundSchema = new Schema({
   price: Number,
   description: String,
   location: String,
+  geometry: {
+    type: {
+      type: String,
+      enum: ["Point"], // 'location.type 'must be POINT'
+      required: true,
+    },
+
+    coordinates: {
+      type: [Number],
+      require: true,
+    },
+  },
   author: {
     type: Schema.Types.ObjectId,
     ref: "User",
