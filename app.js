@@ -14,6 +14,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 
+const MongoDBStore = require("connect-mongo")(session);
+
 const userRoutes = require("./routes/users");
 const campgroundsRoutes = require("./routes/campgrounds");
 const reviewsRoutes = require("./routes/reviews");
@@ -21,8 +23,11 @@ const reviewsRoutes = require("./routes/reviews");
 const helmet = require("helmet");
 
 const mongoSanitize = require("express-mongo-sanitize");
+const { MongoStore } = require("connect-mongo");
 
-mongoose.connect("mongodb://localhost:27017/yelp-camp", {
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
+
+mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
@@ -47,16 +52,29 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 app.use(helmet());
 
+const secret = process.env.SECRET || "thisshouldbeabettersecret";
+
+const store = new MongoDBStore({
+  url: dbUrl,
+  secret,
+  touchAfter: 24 * 60 * 60,
+});
+
+store.on("error", function (e) {
+  console.log("Session Store error", e);
+});
+
 const sessionConfig = {
+  store,
   name: "black hole",
-  secret: "thisshouldbeabettersecret",
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
     // secure:true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // In mili seconds
+    maxAge: 1000 * 60 * 60 * 24 * 7, // One week time
   },
 };
 
